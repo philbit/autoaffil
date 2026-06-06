@@ -1,9 +1,8 @@
 # autoaffil — Automatic affiliation numbering for LaTeX
 
 `autoaffil` is a LaTeX package for the author/affiliation layout style
-used in physics and related fields: all authors appear on a single line
-(or a short paragraph) with superscript numbers linking each name to a
-list of affiliations printed below — the style native to
+used in physics and related fields: all authors appear in a single block with superscript numbers linking
+each name to a list of affiliations printed below — the style native to
 `revtex4-2` with the `superscriptaddress` option, and familiar from
 journals such as Physical Review Letters.
 

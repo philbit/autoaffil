@@ -60,25 +60,33 @@
 % \maketitle
 %
 % \begin{abstract}
-% The \textsf{autoaffil} package automates the numbering of author
-% affiliations for the \textsf{article} document class and compatible
-% classes. Authors and affiliations are declared individually in the
-% preamble; identical affiliation strings are deduplicated automatically;
-% affiliation numbers are assigned in order of first appearance; and
-% \cs{maketitle} outputs the complete author/affiliation/notes block
-% without further intervention from the author. A single dependency
-% (\textsf{etoolbox}) and broad compatibility across document
-% classes make this package suitable for submission-ready manuscripts.
+% \textsf{autoaffil} provides the author/affiliation layout style
+% common in physics and related fields: all authors in a single block
+% with superscript numbers linking each name to a list of affiliations
+% printed below---the style native to \textsf{revtex4-2} with the
+% \texttt{superscriptaddress} option, and familiar from journals such as
+% \emph{Physical Review Letters}.  The package brings this style to the
+% standard \textsf{article} class and compatible classes, with automatic
+% deduplication: authors and affiliations are declared individually in
+% the preamble; identical affiliation strings are assigned the same
+% number; numbers are assigned in order of first appearance; and
+% \cs{maketitle} outputs the complete block without further intervention.
 % \end{abstract}
 %
 % \tableofcontents
 %
 % \section{Introduction}
 %
-% Managing author affiliations in \LaTeX\ has traditionally required
-% either hand-numbering (tedious and error-prone) or the
-% \textsf{authblk} package (which still requires manual deduplication
-% and can interact badly with some journal styles).
+% The author/affiliation layout style used in physics and related fields
+% places all author names in a single block with superscript numbers
+% linking each name to a list of affiliations printed below.  This is the style native to \textsf{revtex4-2} with the
+% \texttt{superscriptaddress} option, and familiar from journals such as
+% \emph{Physical Review Letters}.
+%
+% Reproducing this style in the standard \textsf{article} class has
+% traditionally required either hand-numbering (tedious and error-prone)
+% or the \textsf{authblk} package (which still requires manual
+% deduplication and can interact badly with some journal styles).
 %
 % \textsf{autoaffil} takes a different approach: authors and
 % affiliations are declared separately and identically-worded
