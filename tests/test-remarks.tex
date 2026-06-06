@@ -1,0 +1,21 @@
+% test-remarks.tex
+% \autoremark: special remarks with math-mode symbols.
+% Tests * (equal contribution) and \dagger (corresponding author).
+\documentclass{article}
+\usepackage{autoaffil}
+
+\autoauthor[*]{Alice Anderson}
+  \autoaffil{Institute One}
+\autoauthor[*,\dagger]{Bob Brown}
+  \autoaffil{Institute Two}
+\autoremark{*}{Equal contribution.}
+\autoremark{\dagger}{Corresponding author: bob@example.com}
+
+\title{Test: Remarks}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Remarks appear below the affiliation list.
+\end{document}

@@ -1,15 +1,15 @@
 % test-manual.tex
 % The [manual] option suppresses auto-insertion; the user calls
-% \printauthors, \printaffils, and \printnotes explicitly.
+% \printauthors, \printaffils, and \printremarks explicitly.
 \documentclass{article}
 \usepackage[manual]{autoaffil}
 
-\addauthor{Alice Anderson}
-  \addaffil{Institute One}
-\addauthor{Bob Brown}
-  \addaffil{Institute Two}
-  \addaffil{Institute One}
-\addnote{*}{Equal contribution.}
+\autoauthor{Alice Anderson}
+  \autoaffil{Institute One}
+\autoauthor{Bob Brown}
+  \autoaffil{Institute Two}
+  \autoaffil{Institute One}
+\autoremark{*}{Equal contribution.}
 
 \title{Test: Manual Mode}
 \date{2026-01-01}
@@ -23,7 +23,7 @@
 \vskip 0.5em
 \printaffils
 \vskip 0.3em
-\printnotes
+\printremarks
 \end{center}
 
 \section{Introduction}

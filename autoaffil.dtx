@@ -124,16 +124,16 @@
 %   \documentclass{article}
 %   \usepackage[ranges,superaftercomma]{autoaffil}
 %
-%   \addauthor{Alice Anderson}
-%     \addaffil{MIT, Cambridge MA}
-%     \addaffil{Princeton University}
-%   \addauthor[*]{Bob Brown}
-%     \addaffil{MIT, Cambridge MA}   % same text -> same number (1)
-%     \addaffil{CERN, Geneva}
-%   \addauthor[*,\dagger]{Carol Chen}
-%     \addaffil{CERN, Geneva}        % deduplicated: same number as Bob's
-%   \addnote{*}{Equal contribution.}
-%   \addnote{\dagger}{Corresponding: carol@example.com}
+%   \autoauthor{Alice Anderson}
+%     \autoaffil{MIT, Cambridge MA}
+%     \autoaffil{Princeton University}
+%   \autoauthor[*]{Bob Brown}
+%     \autoaffil{MIT, Cambridge MA}   % same text -> same number (1)
+%     \autoaffil{CERN, Geneva}
+%   \autoauthor[*,\dagger]{Carol Chen}
+%     \autoaffil{CERN, Geneva}        % deduplicated: same number as Bob's
+%   \autoremark{*}{Equal contribution.}
+%   \autoremark{\dagger}{Corresponding: carol@example.com}
 %
 %   \title{My Paper}
 %   \begin{document}
@@ -162,15 +162,15 @@
 % \subsection{Declaring authors and affiliations}
 % \label{sec:decl}
 %
-% \DescribeMacro{\addauthor}
-% \cs{addauthor}\oarg{extra}\marg{name} declares one author.  Authors
+% \DescribeMacro{\autoauthor}
+% \cs{autoauthor}\oarg{extra}\marg{name} declares one author.  Authors
 % are output in the order they are declared.  The optional argument
 % \meta{extra} is a comma-separated list of math-mode symbols that are
 % appended as extra superscripts \emph{after} the affiliation numbers
 % (e.g.\ |*|, |\dagger|, |\ddagger|).
 %
-% \DescribeMacro{\addaffil}
-% \cs{addaffil}\marg{text} attaches one affiliation to the most recently
+% \DescribeMacro{\autoaffil}
+% \cs{autoaffil}\marg{text} attaches one affiliation to the most recently
 % declared author.  Repeat for each affiliation of that author.  If
 % \meta{text} is identical---exact string match---to a previously
 % registered affiliation, no new number is allocated; the existing
@@ -181,23 +181,23 @@
 % To guarantee string identity and keep affiliation text in one place,
 % predefine each affiliation as a command in the preamble:
 % \begin{verbatim}
-%   \newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
-%   \newcommand{\CERN}{\addaffil{CERN, Geneva}}
+%   \newcommand{\MIT}{\autoaffil{MIT, Cambridge MA}}
+%   \newcommand{\CERN}{\autoaffil{CERN, Geneva}}
 % \end{verbatim}
 % Then declare authors as:
 % \begin{verbatim}
-%   \addauthor{Alice Anderson} \MIT \Princeton
-%   \addauthor{Bob Brown}      \MIT \CERN
+%   \autoauthor{Alice Anderson} \MIT \Princeton
+%   \autoauthor{Bob Brown}      \MIT \CERN
 % \end{verbatim}
 % Any future change to an affiliation string needs to be made in exactly
 % one place and cannot accidentally break deduplication.
 %
-% \DescribeMacro{\addnote}
-% \cs{addnote}\marg{symbol}\marg{text} defines a special footnote entry,
+% \DescribeMacro{\autoremark}
+% \cs{autoremark}\marg{symbol}\marg{text} defines a special remark entry,
 % typically for equal contribution, corresponding author information, or
 % similar annotations. \meta{symbol} is math-mode content (|*|,
-% |\dagger|, |\ddagger|, \ldots). Notes are output in definition order
-% by \cs{printnotes}.
+% |\dagger|, |\ddagger|, \ldots). Remarks are output in definition order
+% by \cs{printremarks}.
 %
 % \subsection{Package options}
 % \label{sec:options}
@@ -253,10 +253,10 @@
 % \cs{printaffils} typesets the numbered affiliation list, one entry per
 % line, each preceded by its number in a superscript.
 %
-% \DescribeMacro{\printnotes}
-% \cs{printnotes} typesets the special footnotes declared with
-% \cs{addnote}, one per line, each preceded by its symbol in a
-% superscript. If no notes were declared, this command produces no output.
+% \DescribeMacro{\printremarks}
+% \cs{printremarks} typesets the special remarks declared with
+% \cs{autoremark}, one per line, each preceded by its symbol in a
+% superscript. If no remarks were declared, this command produces no output.
 %
 % \subsection{Customisation hooks}
 % \label{sec:hooks}
@@ -290,7 +290,7 @@
 %   applied to |\edef|-expanded strings. |MIT| and |MIT | (trailing
 %   space) are treated as different affiliations. The recommended way to
 %   ensure consistency is to predefine each affiliation as a command:
-%   |\newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}| --- there is then
+%   |\newcommand{\MIT}{\autoaffil{MIT, Cambridge MA}}| --- there is then
 %   one authoritative spelling and the string identity is guaranteed
 %   automatically (see Section~\ref{sec:decl}).
 %
@@ -302,7 +302,7 @@
 %   |\author{...}| in |\AtBeginDocument|, wrapped in a
 %   |\parbox[t]{\textwidth}| to allow paragraph-mode commands inside
 %   the LR-mode tabular cells that many classes use around |\@author|.
-%   Manual mode (|\printauthors|, |\printaffils|, |\printnotes|) works
+%   Manual mode (|\printauthors|, |\printaffils|, |\printremarks|) works
 %   with any class whatsoever.
 %
 % \item \textbf{\textsf{hyperref} PDF metadata.} |\@author| is used by
@@ -367,8 +367,8 @@
 \aaf@nobreakfalse
 \DeclareOption{nobreak}{\aaf@nobreaktrue}
 
-% manual: suppress automatic insertion of the author/affiliation/notes block
-% into \maketitle.  Use \printauthors, \printaffils, and \printnotes to place
+% manual: suppress automatic insertion of the author/affiliation/remarks block
+% into \maketitle.  Use \printauthors, \printaffils, and \printremarks to place
 % the blocks manually.  Without this option the blocks are inserted
 % automatically by \maketitle.
 \newif\ifaaf@manual
@@ -433,8 +433,8 @@
 % |aaf@authorextra@N| & extra superscript marks for author $N$ \\
 % |aaf@authormarks@N| & comma-separated affiliation numbers for author $N$ \\
 % |aaf@affiltext@N|   & text of affiliation $N$ \\
-% |aaf@notesym@N|     & math-mode symbol for note $N$ \\
-% |aaf@notetext@N|    & text of note $N$ \\
+% |aaf@remarksym@N|     & math-mode symbol for remark $N$ \\
+% |aaf@remarktext@N|    & text of remark $N$ \\
 % \hline
 % \end{tabular}
 % \end{center}
@@ -442,7 +442,7 @@
 %    \begin{macrocode}
 \newcounter{aaf@naffils}
 \newcounter{aaf@nauthors}
-\newcounter{aaf@nnotes}
+\newcounter{aaf@nremarks}
 \newcounter{aaf@i}
 %    \end{macrocode}
 %
@@ -492,12 +492,12 @@
 %
 % \subsection{User-level declaration commands}
 %
-% \begin{macro}{\addauthor}
+% \begin{macro}{\autoauthor}
 % Increments |aaf@nauthors|, stores the name and optional extra
 % superscript marks, and initialises the marks list to empty.
 %    \begin{macrocode}
-% ---- \addauthor[extra]{Name} ----
-\newcommand\addauthor[2][]{%
+% ---- \autoauthor[extra]{Name} ----
+\newcommand\autoauthor[2][]{%
   \stepcounter{aaf@nauthors}%
   \edef\aaf@aid{\arabic{aaf@nauthors}}%
   \expandafter\gdef\csname aaf@authorname@\aaf@aid\endcsname{#2}%
@@ -507,12 +507,12 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\addaffil}
+% \begin{macro}{\autoaffil}
 % Registers the affiliation (deduplicating if necessary) and appends its
 % index to the current author's comma-separated marks list.
 %    \begin{macrocode}
-% ---- \addaffil{text} ----
-\newcommand\addaffil[1]{%
+% ---- \autoaffil{text} ----
+\newcommand\autoaffil[1]{%
   \edef\aaf@aid{\arabic{aaf@nauthors}}%
   \aaf@registeraffil{#1}%
   \expandafter\let\expandafter\aaf@curmarks\csname aaf@authormarks@\aaf@aid\endcsname
@@ -525,17 +525,17 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\addnote}
-% Appends a note symbol and text to the notes lists.
+% \begin{macro}{\autoremark}
+% Appends a remark symbol and text to the remarks list.
 %    \begin{macrocode}
-% ---- \addnote{symbol}{text} ----
-% Defines a special footnote entry (e.g. equal contribution, corresponding
+% ---- \autoremark{symbol}{text} ----
+% Defines a special remark entry (e.g.\ equal contribution, corresponding
 % author) identified by a math-mode symbol such as * or \dagger.
-% Notes are printed in definition order by \printnotes.
-\newcommand\addnote[2]{%
-  \stepcounter{aaf@nnotes}%
-  \expandafter\gdef\csname aaf@notesym@\arabic{aaf@nnotes}\endcsname{#1}%
-  \expandafter\gdef\csname aaf@notetext@\arabic{aaf@nnotes}\endcsname{#2}%
+% Remarks are printed in definition order by \printremarks.
+\newcommand\autoremark[2]{%
+  \stepcounter{aaf@nremarks}%
+  \expandafter\gdef\csname aaf@remarksym@\arabic{aaf@nremarks}\endcsname{#1}%
+  \expandafter\gdef\csname aaf@remarktext@\arabic{aaf@nremarks}\endcsname{#2}%
 }
 %    \end{macrocode}
 % \end{macro}
@@ -821,20 +821,20 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\printnotes}
-% Typesets the special footnotes. Produces no output if no notes were
+% \begin{macro}{\printremarks}
+% Typesets the special remarks. Produces no output if no remarks were
 % declared.
 %    \begin{macrocode}
-% ---- \printnotes ----
-% Typesets the special footnotes defined with \addnote, one per line,
+% ---- \printremarks ----
+% Typesets the special remarks defined with \autoremark, one per line,
 % each preceded by its symbol in a superscript.
-\newcommand\printnotes{%
+\newcommand\printremarks{%
   \begingroup
   \setcounter{aaf@i}{0}%
-  \@whilenum\value{aaf@i}<\value{aaf@nnotes}\do{%
+  \@whilenum\value{aaf@i}<\value{aaf@nremarks}\do{%
     \stepcounter{aaf@i}%
-    \noindent$^{\csname aaf@notesym@\arabic{aaf@i}\endcsname}$%
-    \csname aaf@notetext@\arabic{aaf@i}\endcsname\par
+    \noindent$^{\csname aaf@remarksym@\arabic{aaf@i}\endcsname}$%
+    \csname aaf@remarktext@\arabic{aaf@i}\endcsname\par
   }%
   \endgroup
 }
@@ -844,16 +844,16 @@
 % \subsection{Automatic insertion into \cs{maketitle}}
 %
 % \begin{macro}{\aaf@block}
-% |\aaf@block| typesets the complete author/affiliation/notes block.
+% |\aaf@block| typesets the complete author/affiliation/remarks block.
 % |\normalfont| and |\normalsize| at the top reset any font or size
 % inherited from the surrounding |\@maketitle| context (some classes
 % wrap |\@author| in bold or a larger size). The vertical skip before
-% notes is only inserted when notes exist.
+% remarks section is only inserted when remarks exist.
 %    \begin{macrocode}
 % ===========================================================
 %  Automatic insertion into \maketitle (disabled by [manual]).
 %
-%  \aaf@block typesets the complete author/affiliation/notes block.
+%  \aaf@block typesets the complete author/affiliation/remarks block.
 %  \normalfont and \normalsize at the top reset any font inherited
 %  from the surrounding context in \@maketitle.
 %
@@ -872,9 +872,9 @@
   \printauthors\par
   \vskip 0.6em\relax
   \printaffils
-  \ifnum\value{aaf@nnotes}>0\relax
+  \ifnum\value{aaf@nremarks}>0\relax
     \vskip 0.4em\relax
-    \printnotes
+    \printremarks
   \fi
 }
 %    \end{macrocode}
@@ -887,7 +887,7 @@
 % \textbf{Why \texttt{\textbackslash parbox}:} many classes typeset |\@author| inside a
 % tabular |c|-column (LR mode). Paragraph-mode commands such as |\par|
 % and |\noindent| (used by |\printauthors|, |\printaffils|,
-% |\printnotes|) require paragraph mode. A |\parbox[t]{\textwidth}|
+% |\printremarks|) require paragraph mode. A |\parbox[t]{\textwidth}|
 % provides this sub-environment; |\centering| inside it centres each
 % output line.
 %
@@ -915,7 +915,7 @@
     %
     % \parbox[t]{\textwidth} creates a top-aligned paragraph box spanning
     % the full text width.  This lets \printauthors, \printaffils, and
-    % \printnotes use paragraph-mode commands (such as \par and \noindent)
+    % \printremarks use paragraph-mode commands (such as \par and \noindent)
     % even when \@author is typeset inside a tabular cell (LR mode).
     % \centering centres each line within the parbox.
     \author{%

@@ -19,16 +19,16 @@ complete author/affiliation/notes block without any further effort.
 \documentclass{article}
 \usepackage[ranges,superaftercomma]{autoaffil}
 
-\addauthor{Alice Anderson}
-  \addaffil{MIT, Cambridge MA}
-  \addaffil{Princeton University}
-\addauthor[*]{Bob Brown}
-  \addaffil{MIT, Cambridge MA}   % deduplicated — same number as Alice's MIT
-  \addaffil{CERN, Geneva}
-\addauthor[*,\dagger]{Carol Chen}
-  \addaffil{CERN, Geneva}        % deduplicated
-\addnote{*}{Equal contribution.}
-\addnote{\dagger}{Corresponding author: \texttt{carol@example.com}}
+\autoauthor{Alice Anderson}
+  \autoaffil{MIT, Cambridge MA}
+  \autoaffil{Princeton University}
+\autoauthor[*]{Bob Brown}
+  \autoaffil{MIT, Cambridge MA}   % deduplicated — same number as Alice's MIT
+  \autoaffil{CERN, Geneva}
+\autoauthor[*,\dagger]{Carol Chen}
+  \autoaffil{CERN, Geneva}        % deduplicated
+\autoremark{*}{Equal contribution.}
+\autoremark{\dagger}{Corresponding author: \texttt{carol@example.com}}
 
 \title{My Paper}
 \date{\today}
@@ -87,25 +87,25 @@ MiKTeX Console to install `autoaffil` manually.
 ```latex
 \usepackage[<options>]{autoaffil}
 
-\addauthor[<extra>]{Author Name}
+\autoauthor[<extra>]{Author Name}
 %   Declare an author. The optional argument <extra> is a comma-separated
 %   list of math-mode symbols to append as extra superscripts, e.g. *
-%   or \dagger. Order of \addauthor calls determines the output order.
+%   or \dagger. Order of \autoauthor calls determines the output order.
 
-\addaffil{Affiliation text}
+\autoaffil{Affiliation text}
 %   Attach an affiliation to the most recently declared author. Repeat
 %   for each affiliation. Identical strings (exact match) are
 %   automatically given the same number.
 
 % Tip: predefine affiliations as commands to guarantee string identity
 % and keep each affiliation text in one place:
-\newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
-\newcommand{\CERN}{\addaffil{CERN, Geneva}}
-% Then: \addauthor{Alice} \MIT \CERN
+\newcommand{\MIT}{\autoaffil{MIT, Cambridge MA}}
+\newcommand{\CERN}{\autoaffil{CERN, Geneva}}
+% Then: \autoauthor{Alice} \MIT \CERN
 
-\addnote{<symbol>}{<text>}
-%   Define a special footnote. <symbol> is math-mode content (*, \dagger,
-%   \ddagger, …). \printnotes outputs them in definition order.
+\autoremark{<symbol>}{<text>}
+%   Define a special remark. <symbol> is math-mode content (*, \dagger,
+%   \ddagger, …). \printremarks outputs them in definition order.
 ```
 
 ### Package options
@@ -115,7 +115,7 @@ MiKTeX Console to install `autoaffil` manually.
 | `ranges` | Compress runs of 3+ consecutive affiliation numbers to `n--m`; pairs and singles are unchanged. |
 | `superaftercomma` | Place superscripts *after* the inter-author comma (revtex4-2 style) rather than before it. |
 | `nobreak` | Wrap each name+superscript unit in `\mbox{}` to prevent mid-entry line breaks; inter-author spaces remain breakable. |
-| `manual` | Suppress automatic insertion into `\maketitle`; use `\printauthors`, `\printaffils`, `\printnotes` manually. |
+| `manual` | Suppress automatic insertion into `\maketitle`; use `\printauthors`, `\printaffils`, `\printremarks` manually. |
 
 Options may be freely combined:
 
@@ -135,7 +135,7 @@ date, then place the blocks yourself:
 \maketitle
 \printauthors   % bold author list with superscripts
 \printaffils    % numbered affiliation list
-\printnotes     % special footnotes (only if \addnote was called)
+\printremarks     % special remarks (only if \autoremark was called)
 ```
 
 ### Customisation
@@ -161,13 +161,13 @@ Redefine any of these after `\usepackage{autoaffil}`:
 - **Auto mode** works with any document class whose `\@maketitle`
   typesets `\@author` — in practice essentially all standard, journal,
   and preprint classes.
-- **Manual mode** (`\printauthors`, `\printaffils`, `\printnotes`) works
+- **Manual mode** (`\printauthors`, `\printaffils`, `\printremarks`) works
   with any document class whatsoever.
 - **Deduplication** is based on exact string comparison, so affiliation
   strings must be spelled identically across authors. The recommended
   pattern is to predefine each affiliation as a command:
   ```latex
-  \newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
+  \newcommand{\MIT}{\autoaffil{MIT, Cambridge MA}}
   ```
   This keeps each affiliation text in one place and makes typos
   impossible.

@@ -26,12 +26,12 @@ specialised document class.
 
 <p>
 Authors and affiliations are declared individually in the preamble using
-<strong>\addauthor</strong> and <strong>\addaffil</strong>. Identical
+<strong>\autoauthor</strong> and <strong>\autoaffil</strong>. Identical
 affiliation strings are automatically deduplicated: each unique affiliation
 receives a number in order of first appearance, and authors sharing an
 affiliation automatically receive the same number. A single
 <strong>\maketitle</strong> call outputs the complete
-author/affiliation/notes block without any further effort.
+author/affiliation/remarks block without any further effort.
 </p>
 
 <p><strong>Package options:</strong></p>
@@ -50,8 +50,8 @@ author/affiliation/notes block without any further effort.
   </li>
   <li>
     <em>manual</em> &mdash; suppress auto-insertion into \maketitle; place the
-    author, affiliation, and note blocks manually via \printauthors,
-    \printaffils, and \printnotes
+    author, affiliation, and remark blocks manually via \printauthors,
+    \printaffils, and \printremarks
   </li>
 </ul>
 

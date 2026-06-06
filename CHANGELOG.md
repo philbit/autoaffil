@@ -14,14 +14,14 @@ Initial public release.
 
 ### Added
 
-- `\addauthor[extra]{Name}` — declare an author with optional extra superscript
+- `\autoauthor[extra]{Name}` — declare an author with optional extra superscript
   symbols (e.g.\ `*`, `\dagger`).
-- `\addaffil{text}` — attach an affiliation to the most recently declared author;
+- `\autoaffil{text}` — attach an affiliation to the most recently declared author;
   identical strings are deduplicated automatically across the full author list.
-- `\addnote{symbol}{text}` — define a special footnote (equal contribution,
+- `\autoremark{symbol}{text}` — define a special remark (equal contribution,
   corresponding author, etc.).
-- `\printauthors`, `\printaffils`, `\printnotes` — manual-placement commands.
-- Automatic injection of the complete author/affiliation/notes block into
+- `\printauthors`, `\printaffils`, `\printremarks` — manual-placement commands.
+- Automatic injection of the complete author/affiliation/remarks block into
   `\maketitle` via the `\@author`/`\parbox` strategy; compatible with any
   document class whose `\@maketitle` typesets `\@author`.
 - Package option `ranges` — compress runs of three or more consecutive

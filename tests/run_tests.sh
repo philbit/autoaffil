@@ -176,17 +176,17 @@ run_test test-manual "manual mode: explicit \\printauthors etc." \
     "CONTAINS:Bob Brown2,1"
 
 # Affiliation number appears before extra mark in superscript (1,∗ not ∗,1).
-run_test test-notes "addnote: symbols and text appear" \
+run_test test-remarks "autoremark: symbols and text appear" \
     "CONTAINS:Alice Anderson" \
     "CONTAINS:Equal contribution" \
     "CONTAINS:Corresponding" \
     "CONTAINS:Alice Anderson1,∗" \
     "CONTAINS:bob@example.com"
 
-# Options [ranges,superaftercomma,nobreak] combined with \addnote usage.
+# Options [ranges,superaftercomma,nobreak] combined with \autoremark usage.
 # Carol has affiliations 1,2,3 -> 1–3 under [ranges]; superaftercomma puts comma before super.
 # INLINE checks confirm MIT=1 and CERN=3 (pdftotext order is reliable for these two).
-run_test test-combined "combined: [ranges,superaftercomma,nobreak] + \\addnote" \
+run_test test-combined "combined: [ranges,superaftercomma,nobreak] + \\autoremark" \
     "CONTAINS:Alice Anderson" \
     "CONTAINS:Bob Brown" \
     "CONTAINS:Carol Chen" \
