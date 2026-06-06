@@ -1,4 +1,4 @@
-# CTAN Initial Submission — v1.0 (2026-06-05)
+# CTAN Initial Submission — v1.0 (2026-06-06)
 
 Record of the information submitted to CTAN at https://ctan.org/upload
 for the initial release of `autoaffil`. The full package description is

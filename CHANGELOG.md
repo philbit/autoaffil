@@ -8,7 +8,7 @@ adapted to the LaTeX package convention (`v<major>.<minor>`).
 
 ---
 
-## [v1.0] — 2026-06-05
+## [v1.0] — 2026-06-06
 
 Initial public release.
 
