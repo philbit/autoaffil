@@ -1,0 +1,70 @@
+<!--
+  CTAN package description for autoaffil.
+  Open this file in a browser, select all, and paste into the CKEditor
+  "Description" field on the CTAN upload form.
+
+  Supported formatting (per the CTAN upload form's CKEditor toolbar):
+  bold, italic, bulleted/numbered lists, hyperlinks.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<p>
+<strong>autoaffil</strong> provides the author/affiliation layout style common
+in physics and related fields: all authors appear in a single block with
+superscript numbers linking each name to a list of affiliations printed
+below &mdash; the style native to <em>revtex4-2</em> with the
+<em>superscriptaddress</em> option, and familiar from journals such as
+<em>Physical Review Letters</em>. The package brings this style to the
+standard <em>article</em> class and compatible classes, without requiring a
+specialised document class.
+</p>
+
+<p>
+Authors and affiliations are declared individually in the preamble using
+<strong>\addauthor</strong> and <strong>\addaffil</strong>. Identical
+affiliation strings are automatically deduplicated: each unique affiliation
+receives a number in order of first appearance, and authors sharing an
+affiliation automatically receive the same number. A single
+<strong>\maketitle</strong> call outputs the complete
+author/affiliation/notes block without any further effort.
+</p>
+
+<p><strong>Package options:</strong></p>
+<ul>
+  <li>
+    <em>ranges</em> &mdash; compress runs of three or more consecutive affiliation
+    numbers to an en-dash range (e.g. 1&ndash;3); pairs and singles are unchanged
+  </li>
+  <li>
+    <em>superaftercomma</em> &mdash; place superscripts after the inter-author comma
+    (revtex4-2 style) rather than before it
+  </li>
+  <li>
+    <em>nobreak</em> &mdash; wrap each name+superscript unit in \mbox{} to prevent
+    mid-entry line breaks; inter-author spaces remain breakable
+  </li>
+  <li>
+    <em>manual</em> &mdash; suppress auto-insertion into \maketitle; place the
+    author, affiliation, and note blocks manually via \printauthors,
+    \printaffils, and \printnotes
+  </li>
+</ul>
+
+<p>
+The author font, inter-author separator, and inter-author spacing are all
+customisable via simple hook commands (\aafauthorfont, \aafauthorsep,
+\aafauthorspace).
+</p>
+
+<p>
+<strong>Requirements:</strong> LaTeX2e and <em>etoolbox</em> (standard in
+TeX Live and MiKTeX).
+</p>
+
+</body>
+</html>
