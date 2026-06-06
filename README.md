@@ -1,12 +1,18 @@
 # autoaffil — Automatic affiliation numbering for LaTeX
 
-`autoaffil` is a LaTeX package that automates the tedious task of
-numbering author affiliations in the `article` class (and compatible
-classes). Authors and affiliations are declared individually in the
-preamble; identical affiliation strings are deduplicated automatically;
-numbers are assigned in order of first appearance; and `\maketitle`
-outputs the complete author/affiliation/notes block without any further
-effort from the author.
+`autoaffil` is a LaTeX package for the author/affiliation layout style
+used in physics and related fields: all authors appear on a single line
+(or a short paragraph) with superscript numbers linking each name to a
+list of affiliations printed below — the style native to
+`revtex4-2` with the `superscriptaddress` option, and familiar from
+journals such as Physical Review Letters.
+
+The package brings this style to the standard `article` class and
+compatible classes, with automatic deduplication: authors and
+affiliations are declared individually in the preamble; identical
+affiliation strings are automatically assigned the same number; numbers
+are assigned in order of first appearance; and `\maketitle` outputs the
+complete author/affiliation/notes block without any further effort.
 
 ## Quick start
 
