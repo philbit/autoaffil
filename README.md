@@ -60,15 +60,16 @@ numbers come first, then any extra symbols. The output looks like:
 
 `autoaffil` is distributed through CTAN at
 [`macros/latex/contrib/autoaffil`](https://ctan.org/pkg/autoaffil).
-If it is included in your TeX distribution, no manual installation is
-needed:
+Once it is picked up by TeX Live and/or MiKTeX, no manual installation
+is needed:
 
 ```
 # TeX Live
 tlmgr install autoaffil
-
-# MiKTeX (package manager or on-the-fly)
 ```
+
+MiKTeX installs packages on-the-fly on first use; alternatively, use the
+MiKTeX Console to install `autoaffil` manually.
 
 ### Manual installation
 
