@@ -169,6 +169,21 @@
 % number is reused.  Deduplication is therefore automatic and does not
 % require any manual numbering or cross-referencing.
 %
+% \textbf{Tip for multi-author documents.}
+% To guarantee string identity and keep affiliation text in one place,
+% predefine each affiliation as a command in the preamble:
+% \begin{verbatim}
+%   \newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
+%   \newcommand{\CERN}{\addaffil{CERN, Geneva}}
+% \end{verbatim}
+% Then declare authors as:
+% \begin{verbatim}
+%   \addauthor{Alice Anderson} \MIT \Princeton
+%   \addauthor{Bob Brown}      \MIT \CERN
+% \end{verbatim}
+% Any future change to an affiliation string needs to be made in exactly
+% one place and cannot accidentally break deduplication.
+%
 % \DescribeMacro{\addnote}
 % \cs{addnote}\marg{symbol}\marg{text} defines a special footnote entry,
 % typically for equal contribution, corresponding author information, or
@@ -265,8 +280,11 @@
 %
 % \item \textbf{Deduplication is exact string comparison.} |\ifx| is
 %   applied to |\edef|-expanded strings. |MIT| and |MIT | (trailing
-%   space) are treated as different affiliations. Be consistent when
-%   repeating affiliation strings.
+%   space) are treated as different affiliations. The recommended way to
+%   ensure consistency is to predefine each affiliation as a command:
+%   |\newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}| --- there is then
+%   one authoritative spelling and the string identity is guaranteed
+%   automatically (see Section~\ref{sec:decl}).
 %
 % \item \textbf{Auto mode compatibility.} Auto mode works with any
 %   document class whose |\@maketitle| typesets |\@author|---this

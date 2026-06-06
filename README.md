@@ -91,6 +91,12 @@ tlmgr install autoaffil
 %   for each affiliation. Identical strings (exact match) are
 %   automatically given the same number.
 
+% Tip: predefine affiliations as commands to guarantee string identity
+% and keep each affiliation text in one place:
+\newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
+\newcommand{\CERN}{\addaffil{CERN, Geneva}}
+% Then: \addauthor{Alice} \MIT \CERN
+
 \addnote{<symbol>}{<text>}
 %   Define a special footnote. <symbol> is math-mode content (*, \dagger,
 %   \ddagger, …). \printnotes outputs them in definition order.
@@ -151,6 +157,14 @@ Redefine any of these after `\usepackage{autoaffil}`:
   and preprint classes.
 - **Manual mode** (`\printauthors`, `\printaffils`, `\printnotes`) works
   with any document class whatsoever.
+- **Deduplication** is based on exact string comparison, so affiliation
+  strings must be spelled identically across authors. The recommended
+  pattern is to predefine each affiliation as a command:
+  ```latex
+  \newcommand{\MIT}{\addaffil{MIT, Cambridge MA}}
+  ```
+  This keeps each affiliation text in one place and makes typos
+  impossible.
 
 ## Documentation
 
