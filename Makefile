@@ -7,6 +7,7 @@ PDFFILE  = $(PACKAGE).pdf
 LATEX    = pdflatex
 LATEX2   = latex
 NONSTOP  = -interaction=nonstopmode
+MKINDEX  = makeindex
 
 .PHONY: all doc unpack test ctan tds clean distclean help
 
@@ -17,6 +18,8 @@ doc: $(PDFFILE)
 
 $(PDFFILE): $(DTXFILE)
 	$(LATEX) $(NONSTOP) $(DTXFILE)
+	$(MKINDEX) -s gglo.ist -o $(PACKAGE).gls $(PACKAGE).glo
+	$(MKINDEX) -s gind.ist -o $(PACKAGE).ind $(PACKAGE).idx
 	$(LATEX) $(NONSTOP) $(DTXFILE)
 	$(LATEX) $(NONSTOP) $(DTXFILE)
 
