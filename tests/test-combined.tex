@@ -23,6 +23,7 @@
 \begin{document}
 \maketitle
 \section{Body}
-Alice and Bob have ranges; Carol has affiliations 1,2,3 which should compress to
-a range under the \texttt{ranges} option.
+Only Carol has three consecutive affiliations (1,2,3) and gets a range (1--3).
+Alice has two consecutive affiliations (1,2) and Bob has two non-consecutive (1,3);
+neither meets the 3+ threshold for range compression.
 \end{document}

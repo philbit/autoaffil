@@ -183,9 +183,10 @@ run_test test-notes "addnote: symbols and text appear" \
     "CONTAINS:Alice Anderson1,∗" \
     "CONTAINS:bob@example.com"
 
+# Options [ranges,superaftercomma,nobreak] combined with \addnote usage.
 # Carol has affiliations 1,2,3 -> 1–3 under [ranges]; superaftercomma puts comma before super.
 # INLINE checks confirm MIT=1 and CERN=3 (pdftotext order is reliable for these two).
-run_test test-combined "combined options: ranges+superaftercomma+nobreak" \
+run_test test-combined "combined: [ranges,superaftercomma,nobreak] + \\addnote" \
     "CONTAINS:Alice Anderson" \
     "CONTAINS:Bob Brown" \
     "CONTAINS:Carol Chen" \
