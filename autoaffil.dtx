@@ -1,0 +1,913 @@
+% \iffalse meta-comment
+%%
+%% autoaffil.dtx  --  Documented source for the autoaffil LaTeX package
+%%
+%% Copyright (C) 2026 Philip Bittihn <philip@bittihn.de>
+%%
+%% This work may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.3c of this license
+%% or (at your option) any later version.
+%% The latest version of this license is in
+%%     https://www.latex-project.org/lppl.txt
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% The Current Maintainer of this work is Philip Bittihn.
+%%
+%% This work consists of the files autoaffil.dtx and autoaffil.ins
+%% and the derived file autoaffil.sty.
+%%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{autoaffil.dtx}[2026/06/05 v1.0 autoaffil documented source]
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[colorlinks=true,allcolors=black,
+  pdfauthor={Philip Bittihn},
+  pdftitle={The autoaffil package}]{hyperref}
+\CodelineIndex
+\EnableCrossrefs
+\RecordChanges
+\begin{document}
+  \DocInput{autoaffil.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \changes{v1.0}{2026/06/05}{Initial public release}
+%
+% \GetFileInfo{autoaffil.dtx}
+%
+% \DoNotIndex{\newcommand,\renewcommand,\def,\edef,\gdef,\xdef,\let,\global}
+% \DoNotIndex{\ifx,\fi,\ifnum,\else,\newif}
+% \DoNotIndex{\begingroup,\endgroup,\par,\relax,\expandafter}
+% \DoNotIndex{\csname,\endcsname,\arabic,\stepcounter,\setcounter,\value}
+% \DoNotIndex{\the,\toks,\numexpr,\noexpand,\mbox,\hspace,\textbf}
+% \DoNotIndex{\newcounter,\DeclareOption,\ProcessOptions}
+% \DoNotIndex{\NeedsTeXFormat,\ProvidesPackage,\RequirePackage}
+% \DoNotIndex{\AtBeginDocument,\makeatletter,\makeatother}
+% \DoNotIndex{\noindent,\vskip,\centering,\normalfont,\normalsize}
+% \DoNotIndex{\@empty,\@for,\@whilenum,\@author,\author,\parbox,\textwidth}
+%
+% \title{The \textsf{autoaffil} package\thanks{This file has version
+%   \fileversion, last revised \filedate.}}
+% \author{Philip Bittihn\\\texttt{philip@bittihn.de}}
+% \date{\filedate}
+% \maketitle
+%
+% \begin{abstract}
+% The \textsf{autoaffil} package automates the numbering of author
+% affiliations for the \textsf{article} document class and compatible
+% classes. Authors and affiliations are declared individually in the
+% preamble; identical affiliation strings are deduplicated automatically;
+% affiliation numbers are assigned in order of first appearance; and
+% \cs{maketitle} outputs the complete author/affiliation/notes block
+% without further intervention from the author. A single dependency
+% (\textsf{etoolbox}) and broad compatibility across document
+% classes make this package suitable for submission-ready manuscripts.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Introduction}
+%
+% Managing author affiliations in \LaTeX\ has traditionally required
+% either hand-numbering (tedious and error-prone) or the
+% \textsf{authblk} package (which still requires manual deduplication
+% and can interact badly with some journal styles).
+%
+% \textsf{autoaffil} takes a different approach: authors and
+% affiliations are declared separately and identically-worded
+% affiliations are \emph{automatically} assigned the same number.
+% The output block is injected into \cs{maketitle} in a way that is
+% robust across document classes. The only external dependency is
+% \textsf{etoolbox}, which is standard in any modern \TeX\ distribution.
+%
+% \section{Installation}
+%
+% \subsection{From a \TeX\ distribution}
+%
+% If \textsf{autoaffil} is included in your \TeX\ distribution
+% (TeX~Live, MiK\TeX), no manual installation is needed:
+% \begin{quote}
+% |tlmgr install autoaffil| \quad (TeX Live)
+% \end{quote}
+%
+% \subsection{Manual installation}
+%
+% \begin{enumerate}
+% \item Run |latex autoaffil.ins| to extract |autoaffil.sty|.
+% \item Place |autoaffil.sty| in a directory searched by \LaTeX.
+%   For a single project, the same directory as your |.tex| file
+%   suffices. For a system-wide installation, place it under your
+%   local |texmf| tree at |tex/latex/autoaffil/autoaffil.sty| and
+%   run |texhash| (or |mktexlsr|).
+% \end{enumerate}
+%
+% \section{Usage}
+%
+% \subsection{Quick start}
+%
+% \begin{verbatim}
+%   \documentclass{article}
+%   \usepackage[ranges,superaftercomma]{autoaffil}
+%
+%   \addauthor{Alice Anderson}
+%     \addaffil{MIT, Cambridge MA}
+%     \addaffil{Princeton University}
+%   \addauthor[*]{Bob Brown}
+%     \addaffil{MIT, Cambridge MA}   % same text -> same number (1)
+%     \addaffil{CERN, Geneva}
+%   \addauthor[*,\dagger]{Carol Chen}
+%     \addaffil{CERN, Geneva}        % deduplicated: same number as Bob's
+%   \addnote{*}{Equal contribution.}
+%   \addnote{\dagger}{Corresponding: carol@example.com}
+%
+%   \title{My Paper}
+%   \begin{document}
+%   \maketitle
+%   ...
+%   \end{document}
+% \end{verbatim}
+%
+% \noindent With |[superaftercomma]|, the comma precedes the
+% superscript; with |[ranges]|, runs of three or more consecutive
+% numbers compress to a range (none occur here). The output looks like:
+% \begin{quote}
+% \textbf{Alice Anderson},$^{1,2}$~\textbf{Bob Brown},$^{1,3,*}$~\textbf{Carol Chen}$^{3,*,\dagger}$\\[0.4em]
+% $^1$ MIT, Cambridge MA\\
+% $^2$ Princeton University\\
+% $^3$ CERN, Geneva\\[0.2em]
+% $^*$ Equal contribution.\\
+% $^\dagger$ Corresponding: carol@example.com
+% \end{quote}
+%
+% \noindent (Affiliation numbers appear before extra symbols like $*$
+% and $\dagger$. Bob's affiliations 1 and 3 are non-consecutive so they
+% stay as |1,3|; with |[ranges]| an author whose affiliations are 1, 2,
+% and 3 would instead show |1--3|.)
+%
+% \subsection{Declaring authors and affiliations}
+% \label{sec:decl}
+%
+% \DescribeMacro{\addauthor}
+% \cs{addauthor}\oarg{extra}\marg{name} declares one author.  Authors
+% are output in the order they are declared.  The optional argument
+% \meta{extra} is a comma-separated list of math-mode symbols that are
+% appended as extra superscripts \emph{after} the affiliation numbers
+% (e.g.\ |*|, |\dagger|, |\ddagger|).
+%
+% \DescribeMacro{\addaffil}
+% \cs{addaffil}\marg{text} attaches one affiliation to the most recently
+% declared author.  Repeat for each affiliation of that author.  If
+% \meta{text} is identical---exact string match---to a previously
+% registered affiliation, no new number is allocated; the existing
+% number is reused.  Deduplication is therefore automatic and does not
+% require any manual numbering or cross-referencing.
+%
+% \DescribeMacro{\addnote}
+% \cs{addnote}\marg{symbol}\marg{text} defines a special footnote entry,
+% typically for equal contribution, corresponding author information, or
+% similar annotations. \meta{symbol} is math-mode content (|*|,
+% |\dagger|, |\ddagger|, \ldots). Notes are output in definition order
+% by \cs{printnotes}.
+%
+% \subsection{Package options}
+% \label{sec:options}
+%
+% Options may be freely combined:
+% \begin{verbatim}
+%   \usepackage[ranges,superaftercomma,nobreak]{autoaffil}
+% \end{verbatim}
+%
+% \begin{description}
+%
+% \item[\texttt{ranges}]
+%   Compress runs of three or more consecutive affiliation numbers in a
+%   superscript into an en-dash range. For example, an author with
+%   affiliations 1, 2, 3 gets the superscript $^{1\textrm{--}3}$ instead
+%   of $^{1,2,3}$. Pairs and isolated singles are not compressed.
+%   Multiple disjoint ranges in a single superscript are supported
+%   (e.g.\ $^{1\textrm{--}3,5\textrm{--}7}$).
+%
+% \item[\texttt{superaftercomma}]
+%   Place the affiliation superscript \emph{after} the inter-author
+%   comma rather than before it (the default). This matches the style
+%   used by the \emph{Physical Review} family of journals (revtex4-2
+%   style).
+%
+% \item[\texttt{nobreak}]
+%   Wrap each author-name\,+\,superscript unit in \cs{mbox} so that
+%   \TeX\ cannot break a line in the middle of one author's entry. The
+%   spaces between author entries remain valid break points. This option
+%   is most useful for short author lists or narrow typeblocks.
+%
+% \item[\texttt{manual}]
+%   Suppress automatic insertion of the author block into \cs{maketitle}.
+%   The three output commands (see \S\,\ref{sec:output}) must then be
+%   called explicitly by the user. This is useful for documents that need
+%   unusual placement of author information.
+%
+% \end{description}
+%
+% \subsection{Output commands}
+% \label{sec:output}
+%
+% In the default (auto) mode, \cs{maketitle} outputs the full block
+% automatically. In |[manual]| mode---or for unusual placement
+% requirements---the three components can be placed individually:
+%
+% \DescribeMacro{\printauthors}
+% \cs{printauthors} typesets the author list as a single paragraph:
+% \cs{aafauthorfont}-formatted names separated by \cs{aafauthorsep} and
+% \cs{aafauthorspace}, with superscripted affiliation numbers.
+%
+% \DescribeMacro{\printaffils}
+% \cs{printaffils} typesets the numbered affiliation list, one entry per
+% line, each preceded by its number in a superscript.
+%
+% \DescribeMacro{\printnotes}
+% \cs{printnotes} typesets the special footnotes declared with
+% \cs{addnote}, one per line, each preceded by its symbol in a
+% superscript. If no notes were declared, this command produces no output.
+%
+% \subsection{Customisation hooks}
+% \label{sec:hooks}
+%
+% The following hooks can be redefined after |\usepackage{autoaffil}|:
+%
+% \DescribeMacro{\aafauthorfont}
+% \cs{aafauthorfont}\marg{name}: formatting applied to each author name.
+% Default: |\textbf|\marg{name} (bold).\\
+% Example: |\renewcommand\aafauthorfont[1]{\textit{#1}}|
+%
+% \DescribeMacro{\aafauthorsep}
+% \cs{aafauthorsep}: separator token(s) emitted between consecutive
+% author entries. Default: |,| (comma).\\
+% Example: |\renewcommand\aafauthorsep{;}|
+%
+% \DescribeMacro{\aafauthorspace}
+% \cs{aafauthorspace}: breakable space emitted between consecutive
+% author entries (after the separator in default mode, or after the
+% superscript in |superaftercomma| mode). \emph{Must} be a breakable
+% space so that long author lists wrap correctly.
+% Default: |\hspace{0.5em plus 0.2em minus 0.1em}|\\
+% Example: |\renewcommand\aafauthorspace{\ }|
+%
+% \subsection{Compatibility notes}
+% \label{sec:compat}
+%
+% \begin{itemize}
+%
+% \item \textbf{Deduplication is exact string comparison.} |\ifx| is
+%   applied to |\edef|-expanded strings. |MIT| and |MIT | (trailing
+%   space) are treated as different affiliations. Be consistent when
+%   repeating affiliation strings.
+%
+% \item \textbf{Auto mode compatibility.} Auto mode works with any
+%   document class whose |\@maketitle| typesets |\@author|---this
+%   includes the standard \textsf{article} class, essentially all
+%   standard \LaTeX\ classes, and the large majority of journal and
+%   preprint style files. The output block is injected via
+%   |\author{...}| in |\AtBeginDocument|, wrapped in a
+%   |\parbox[t]{\textwidth}| to allow paragraph-mode commands inside
+%   the LR-mode tabular cells that many classes use around |\@author|.
+%   Manual mode (|\printauthors|, |\printaffils|, |\printnotes|) works
+%   with any class whatsoever.
+%
+% \item \textbf{\textsf{hyperref} PDF metadata.} |\@author| is used by
+%   \textsf{hyperref} to set the PDF |Author| metadata field. With the
+%   parbox approach this field will contain \LaTeX\ markup. Users who
+%   need clean metadata should call |\hypersetup{pdfauthor={...}}|
+%   explicitly.
+%
+% \item \textbf{\texttt{[manual]} mode.} In auto mode, |\@author| is set
+%   to empty (via |\author{}|); classes that insert a non-zero-height
+%   strut in the author tabular cell may show a small blank space at the
+%   title position. This is harmless since the user controls placement
+%   manually.
+%
+% \end{itemize}
+%
+% \StopEventually{\PrintChanges\PrintIndex}
+%
+% \section{Implementation}
+%
+% Open the \textsf{package} docstrip guard. Everything between this
+% and the closing guard is extracted to |autoaffil.sty|.
+%
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%
+% \subsection{Package identification and dependencies}
+%
+% We require \LaTeXe{} and load \textsf{etoolbox} (used indirectly via
+% |\AtBeginDocument| and |\apptocmd|; its presence also ensures
+% availability of |\newrobustcmd| for potential future use).
+%
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{autoaffil}[2026/06/05 v1.0 Automatic affiliation footnotes (PB)]
+\RequirePackage{etoolbox}
+%    \end{macrocode}
+%
+% \subsection{Package options}
+%
+% Four boolean flags. All default to \textit{false}; the corresponding
+% option sets the flag to \textit{true}.
+%
+%    \begin{macrocode}
+% ---- package options ----
+
+% ranges: compress runs of 3 or more consecutive affiliation numbers in
+% a superscript list into a range n--m; pairs and singles are unchanged.
+\newif\ifaaf@ranges
+\aaf@rangesfalse
+\DeclareOption{ranges}{\aaf@rangestrue}
+
+% superaftercomma: place superscripts after the inter-author comma
+% (revtex4-2 style) rather than before it.
+\newif\ifaaf@superaftercomma
+\aaf@superaftercommafalse
+\DeclareOption{superaftercomma}{\aaf@superaftercommatrue}
+
+% nobreak: prevent line breaks within a single author's name+superscript unit.
+\newif\ifaaf@nobreak
+\aaf@nobreakfalse
+\DeclareOption{nobreak}{\aaf@nobreaktrue}
+
+% manual: suppress automatic insertion of the author/affiliation/notes block
+% into \maketitle.  Use \printauthors, \printaffils, and \printnotes to place
+% the blocks manually.  Without this option the blocks are inserted
+% automatically by \maketitle.
+\newif\ifaaf@manual
+\aaf@manualfalse
+\DeclareOption{manual}{\aaf@manualtrue}
+
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+% \subsection{Customisation hooks}
+%
+% \begin{macro}{\aafauthorfont}
+% \begin{macro}{\aafauthorsep}
+% \begin{macro}{\aafauthorspace}
+% The three public customisation hooks, all defined with |\newcommand|
+% so users can redefine them with |\renewcommand|.
+%    \begin{macrocode}
+% ===========================================================
+%  User-customisable hooks for \printauthors.
+%  Redefine any of these after \usepackage{autoaffil}.
+%
+%  \aafauthorfont   -- applied to each author name as \aafauthorfont{Name}.
+%                      Default: \textbf (bold).
+%
+%  \aafauthorsep    -- separator emitted between consecutive author entries.
+%                      Default: , (comma).
+%                      Example: \renewcommand\aafauthorsep{;}
+%
+%  \aafauthorspace  -- space emitted between consecutive author entries,
+%                      after the separator (default mode) or after the
+%                      superscript (superaftercomma mode).
+%                      Must be a breakable space so long author lists wrap
+%                      correctly.  Default: a half-em stretchable glue
+%                      (\hspace{0.5em plus 0.2em minus 0.1em}), which is
+%                      slightly wider than a normal inter-word space but
+%                      allows line breaks just like one.
+%                      Example: \renewcommand\aafauthorspace{\ } % plain space
+%                               \renewcommand\aafauthorspace{\quad}
+% ===========================================================
+\newcommand\aafauthorfont[1]{\textbf{#1}}
+\newcommand\aafauthorsep{,}
+\newcommand\aafauthorspace{\hspace{0.5em plus 0.2em minus 0.1em}}
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}
+%
+%    \begin{macrocode}
+\makeatletter
+%    \end{macrocode}
+%
+% \subsection{Counters and data storage}
+%
+% All data are stored in dynamically-named control sequences following
+% the convention |aaf@|\meta{type}|@|\meta{N}.  Four counters track the
+% list sizes; |aaf@i| is a reusable scratch counter used in loops.
+%
+% \begin{center}
+% \begin{tabular}{ll}
+% \hline
+% Control sequence & Content \\
+% \hline
+% |aaf@authorname@N|  & name of author $N$ \\
+% |aaf@authorextra@N| & extra superscript marks for author $N$ \\
+% |aaf@authormarks@N| & comma-separated affiliation numbers for author $N$ \\
+% |aaf@affiltext@N|   & text of affiliation $N$ \\
+% |aaf@notesym@N|     & math-mode symbol for note $N$ \\
+% |aaf@notetext@N|    & text of note $N$ \\
+% \hline
+% \end{tabular}
+% \end{center}
+%
+%    \begin{macrocode}
+\newcounter{aaf@naffils}
+\newcounter{aaf@nauthors}
+\newcounter{aaf@nnotes}
+\newcounter{aaf@i}
+%    \end{macrocode}
+%
+% \subsection{Affiliation lookup and registration}
+%
+% \begin{macro}{\aaf@findaffil}
+% |\aaf@findaffil|\marg{text} performs a linear search over the
+% registered affiliations for an exact string match via |\ifx| on
+% |\edef|-expanded strings. Sets |\aaf@found| to the matching index, or
+% |0| if not found. The loop terminates early on a match by advancing
+% |aaf@i| to |aaf@naffils|.
+%    \begin{macrocode}
+% ---- \aaf@findaffil{text} ----
+\newcommand\aaf@findaffil[1]{%
+  \def\aaf@found{0}%
+  \setcounter{aaf@i}{0}%
+  \@whilenum\value{aaf@i}<\value{aaf@naffils}\do{%
+    \stepcounter{aaf@i}%
+    \def\aaf@tmp{#1}%
+    \expandafter\ifx\csname aaf@affiltext@\arabic{aaf@i}\endcsname\aaf@tmp
+      \xdef\aaf@found{\arabic{aaf@i}}%
+      \setcounter{aaf@i}{\value{aaf@naffils}}%
+    \fi
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\aaf@registeraffil}
+% |\aaf@registeraffil|\marg{text} registers an affiliation string,
+% allocating a new sequential number if it has not been seen before.
+% Sets the global |\aaf@curnum| to the (possibly pre-existing) index.
+%    \begin{macrocode}
+% ---- \aaf@registeraffil{text} ----
+\newcommand\aaf@registeraffil[1]{%
+  \aaf@findaffil{#1}%
+  \ifnum\aaf@found=0\relax
+    \stepcounter{aaf@naffils}%
+    \expandafter\gdef\csname aaf@affiltext@\arabic{aaf@naffils}\endcsname{#1}%
+    \xdef\aaf@curnum{\arabic{aaf@naffils}}%
+  \else
+    \xdef\aaf@curnum{\aaf@found}%
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{User-level declaration commands}
+%
+% \begin{macro}{\addauthor}
+% Increments |aaf@nauthors|, stores the name and optional extra
+% superscript marks, and initialises the marks list to empty.
+%    \begin{macrocode}
+% ---- \addauthor[extra]{Name} ----
+\newcommand\addauthor[2][]{%
+  \stepcounter{aaf@nauthors}%
+  \edef\aaf@aid{\arabic{aaf@nauthors}}%
+  \expandafter\gdef\csname aaf@authorname@\aaf@aid\endcsname{#2}%
+  \expandafter\gdef\csname aaf@authorextra@\aaf@aid\endcsname{#1}%
+  \expandafter\gdef\csname aaf@authormarks@\aaf@aid\endcsname{}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\addaffil}
+% Registers the affiliation (deduplicating if necessary) and appends its
+% index to the current author's comma-separated marks list.
+%    \begin{macrocode}
+% ---- \addaffil{text} ----
+\newcommand\addaffil[1]{%
+  \edef\aaf@aid{\arabic{aaf@nauthors}}%
+  \aaf@registeraffil{#1}%
+  \expandafter\let\expandafter\aaf@curmarks\csname aaf@authormarks@\aaf@aid\endcsname
+  \ifx\aaf@curmarks\@empty
+    \expandafter\xdef\csname aaf@authormarks@\aaf@aid\endcsname{\aaf@curnum}%
+  \else
+    \expandafter\xdef\csname aaf@authormarks@\aaf@aid\endcsname{\aaf@curmarks,\aaf@curnum}%
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\addnote}
+% Appends a note symbol and text to the notes lists.
+%    \begin{macrocode}
+% ---- \addnote{symbol}{text} ----
+% Defines a special footnote entry (e.g. equal contribution, corresponding
+% author) identified by a math-mode symbol such as * or \dagger.
+% Notes are printed in definition order by \printnotes.
+\newcommand\addnote[2]{%
+  \stepcounter{aaf@nnotes}%
+  \expandafter\gdef\csname aaf@notesym@\arabic{aaf@nnotes}\endcsname{#1}%
+  \expandafter\gdef\csname aaf@notetext@\arabic{aaf@nnotes}\endcsname{#2}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Range compression}
+%
+% \begin{macro}{\aaf@compress}
+% |\aaf@compress|\marg{comma-list} processes a sorted comma-separated
+% list of integers left-to-right, compressing consecutive runs of
+% three or more into en-dash ranges, and stores the result in
+% |\aaf@result|.
+%
+% The algorithm maintains a \emph{current run} described by three
+% variables: |\aaf@rc@start| (first number), |\aaf@rc@end| (last
+% number), and |\aaf@rc@len| (run length). On each new number: if it
+% is the successor of |\aaf@rc@end| the run is extended; otherwise the
+% run is flushed and a new run is started.
+%    \begin{macrocode}
+% ===========================================================
+%  Range compression.
+%  \aaf@compress{comma-list-of-integers}  ->  sets \aaf@result
+% ===========================================================
+
+\def\aaf@dash{\mbox{--}}
+
+\newcommand\aaf@compress[1]{%
+  \def\aaf@rc@out{}%
+  \def\aaf@rc@start{}%
+  \def\aaf@rc@end{}%
+  \def\aaf@rc@len{0}%
+  \@for\aaf@rc@n:=#1\do{%
+    \expandafter\aaf@rc@process\expandafter{\aaf@rc@n}%
+  }%
+  \ifx\aaf@rc@start\@empty\else\aaf@rc@flush\fi
+  \let\aaf@result\aaf@rc@out
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\aaf@rc@process}
+% Process one entry from the |\@for| loop. The double |\expandafter|
+% pattern forces expansion of the loop variable |\aaf@rc@n| before
+% passing it as an argument, which prevents |\@nil| sentinels (appended
+% internally by |\@for|) from reaching the arithmetic in |\numexpr|.
+%    \begin{macrocode}
+\newcommand\aaf@rc@process[1]{%
+  \ifx\aaf@rc@start\@empty
+    \def\aaf@rc@start{#1}%
+    \def\aaf@rc@end{#1}%
+    \def\aaf@rc@len{1}%
+  \else
+    \edef\aaf@rc@succ{\the\numexpr\aaf@rc@end+1\relax}%
+    \edef\aaf@rc@cur{#1}%
+    \ifx\aaf@rc@cur\aaf@rc@succ
+      \def\aaf@rc@end{#1}%
+      \edef\aaf@rc@len{\the\numexpr\aaf@rc@len+1\relax}%
+    \else
+      \aaf@rc@flush
+      \def\aaf@rc@start{#1}%
+      \def\aaf@rc@end{#1}%
+      \def\aaf@rc@len{1}%
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\aaf@rc@flush}
+% Flush the current run to |\aaf@rc@out|. The flush rules are:
+% length~1 $\to$ emit the start number; length~2 $\to$ emit
+% |start,end|; length~$\geq3$ $\to$ emit |start\aaf@dash end|.
+%
+% Output is accumulated in |\aaf@rc@out| using |\toks| register
+% concatenation to avoid prematurely expanding |\aaf@dash|
+% (which expands to |\mbox{--}| and must remain unexpanded until
+% typesetting time).
+%    \begin{macrocode}
+\newcommand\aaf@rc@flush{%
+  \ifnum\aaf@rc@len=1\relax
+    \edef\aaf@rc@piece{\aaf@rc@start}%
+  \else\ifnum\aaf@rc@len=2\relax
+    \edef\aaf@rc@piece{\aaf@rc@start,\aaf@rc@end}%
+  \else
+    \edef\aaf@rc@piece{\aaf@rc@start\noexpand\aaf@dash\aaf@rc@end}%
+  \fi\fi
+  \ifx\aaf@rc@out\@empty
+    \let\aaf@rc@out\aaf@rc@piece
+  \else
+    \toks0=\expandafter{\aaf@rc@out}%
+    \toks2=\expandafter{\aaf@rc@piece}%
+    \edef\aaf@rc@out{\the\toks0,\the\toks2}%
+  \fi
+  \def\aaf@rc@start{}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Superscript materialisation}
+%
+% \begin{macro}{\aaf@prepare@marks}
+% Sets |\aaf@allmarks| and |\aaf@extramarks| to fully materialised
+% literal-token strings for author \meta{aid}.  When the |ranges|
+% option is active, |\aaf@allmarks| is passed through |\aaf@compress|
+% and the result is re-materialised via |\toks| (severing any alias
+% chain before the final |\edef|).
+%
+% \textbf{Implementation note (the trailing-comma trap):}
+% |\edef| must be used (not |\let|) for the initial materialisation.
+% A |\let| alias to a csname whose content was itself built by |\@for|
+% can retain an alias chain that introduces a spurious trailing comma
+% inside a subsequent |$^{...}$| argument. The |\edef| collapses the
+% chain into literal character tokens, preventing this.
+%    \begin{macrocode}
+% ===========================================================
+%  \aaf@prepare@marks{aid}
+%  Sets \aaf@allmarks and \aaf@extramarks to fully materialised
+%  literal-token strings.
+% ===========================================================
+\newcommand\aaf@prepare@marks[1]{%
+  \edef\aaf@allmarks{\csname aaf@authormarks@#1\endcsname}%
+  \edef\aaf@extramarks{\csname aaf@authorextra@#1\endcsname}%
+  \ifaaf@ranges
+    \ifx\aaf@allmarks\@empty\else
+      \aaf@compress{\aaf@allmarks}%
+      \toks0=\expandafter{\aaf@result}%
+      \edef\aaf@allmarks{\the\toks0}%
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\aaf@emit@super}
+% Typesets the superscript using the already-materialised
+% |\aaf@allmarks| and |\aaf@extramarks|. These \emph{must} be set by
+% |\edef| before calling this macro. Argument passing is deliberately
+% avoided because passing a macro as |#1| and then using it in
+% |$^{#1}$| reintroduces the alias-chain problem described above.
+%    \begin{macrocode}
+% ===========================================================
+%  \aaf@emit@super
+%  Typesets the superscript using the already-set \aaf@allmarks
+%  and \aaf@extramarks.  These MUST already be fully materialised
+%  literal-token strings (set by \edef) before calling this.
+% ===========================================================
+\newcommand\aaf@emit@super{%
+  \ifx\aaf@allmarks\@empty
+    \ifx\aaf@extramarks\@empty\else$^{\aaf@extramarks}$\fi
+  \else
+    \ifx\aaf@extramarks\@empty
+      $^{\aaf@allmarks}$%
+    \else
+      $^{\aaf@allmarks,\aaf@extramarks}$%
+    \fi
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Author list typesetting}
+%
+% \begin{macro}{\printauthors}
+% Typesets the full author list. Two layout strategies are used
+% depending on the |superaftercomma| option. The |nobreak| option is
+% orthogonal and is handled by the locally-defined |\aaf@unit| wrapper.
+%
+% \textbf{\texttt{superaftercomma} layout:}
+% Between authors: |\aafauthorspace|. Each non-last author's unit is
+% |name + separator + superscript|; the last author's unit is
+% |name + superscript|. The comma belongs to the current author but
+% the superscript belongs to the \emph{current} author (not deferred).
+%
+% \textbf{Default layout:}
+% Each unit is |name + superscript|. Between units:
+% |\aafauthorsep| followed by |\aafauthorspace|.
+%    \begin{macrocode}
+% ---- \printauthors ----
+%
+% Default layout:
+%   \aafauthorfont{Name1}^{m1}\aafauthorsep\aafauthorspace\aafauthorfont{Name2}^{m2}...
+%
+% superaftercomma layout:
+%   \aafauthorfont{Name1}\aafauthorsep^{m1}\aafauthorspace\aafauthorfont{Name2}...
+%
+% nobreak: each name+superscript unit (including the trailing separator in
+%   superaftercomma mode) is wrapped in \mbox{} so it cannot be broken.
+%   The inter-author space remains a valid break point.
+%
+% Implementation note: \aaf@unit{content} wraps content in \mbox{} when
+%   nobreak is active, and is transparent otherwise.
+%
+\newcommand\printauthors{%
+  \begingroup
+  \setcounter{aaf@i}{0}%
+  % Set up the unit wrapper: \aaf@unit{tokens} either outputs tokens
+  % directly (no nobreak) or wraps them in \mbox{tokens} (nobreak).
+  \ifaaf@nobreak
+    \def\aaf@unit##1{\mbox{##1}}%
+  \else
+    \def\aaf@unit##1{##1}%
+  \fi
+  \ifaaf@superaftercomma
+    %
+    % ---- superaftercomma layout ----
+    %
+    % Each unit is: \aafauthorfont{name}\aafauthorsep^{marks}, wrapped by \aaf@unit.
+    % The last unit is: \aafauthorfont{name}^{marks} (no trailing sep).
+    % Between units: \aafauthorspace (breakable unless nobreak).
+    %
+    \def\aaf@prev@marks{}%
+    \def\aaf@prev@extra{}%
+    \def\aaf@isfirst{1}%
+    \@whilenum\value{aaf@i}<\value{aaf@nauthors}\do{%
+      \stepcounter{aaf@i}%
+      \edef\aaf@aid{\arabic{aaf@i}}%
+      % Emit inter-author space before all but the first author.
+      \ifx\aaf@isfirst\@empty
+        \aafauthorspace
+      \fi
+      \def\aaf@isfirst{}%
+      % Prepare this author's marks now (needed to build the unit).
+      \aaf@prepare@marks{\aaf@aid}%
+      \let\aaf@prev@marks\aaf@allmarks
+      \let\aaf@prev@extra\aaf@extramarks
+      % Emit unit: name+sep+super for non-last authors, name+super for the last.
+      \ifnum\aaf@aid<\value{aaf@nauthors}%
+        % Not last: unit = name + separator + super.
+        \aaf@unit{%
+          \aafauthorfont{\csname aaf@authorname@\aaf@aid\endcsname}\aafauthorsep%
+          \let\aaf@allmarks\aaf@prev@marks
+          \let\aaf@extramarks\aaf@prev@extra
+          \aaf@emit@super
+        }%
+      \else
+        % Last author: unit = name + super (no trailing separator).
+        \aaf@unit{%
+          \aafauthorfont{\csname aaf@authorname@\aaf@aid\endcsname}%
+          \let\aaf@allmarks\aaf@prev@marks
+          \let\aaf@extramarks\aaf@prev@extra
+          \aaf@emit@super
+        }%
+      \fi
+    }%
+    %
+  \else
+    %
+    % ---- default layout ----
+    %
+    % Each unit is: \aafauthorfont{name}^{marks}, wrapped by \aaf@unit.
+    % Between units: \aafauthorsep\aafauthorspace.
+    %
+    \def\aaf@sep{}%
+    \@whilenum\value{aaf@i}<\value{aaf@nauthors}\do{%
+      \stepcounter{aaf@i}%
+      \edef\aaf@aid{\arabic{aaf@i}}%
+      \aaf@sep
+      \aaf@prepare@marks{\aaf@aid}%
+      \aaf@unit{%
+        \aafauthorfont{\csname aaf@authorname@\aaf@aid\endcsname}%
+        \aaf@emit@super
+      }%
+      \def\aaf@sep{\aafauthorsep\aafauthorspace}%
+    }%
+  \fi
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\printaffils}
+% Typesets the numbered affiliation list, one entry per line.
+%    \begin{macrocode}
+% ---- \printaffils ----
+\newcommand\printaffils{%
+  \begingroup
+  \setcounter{aaf@i}{0}%
+  \@whilenum\value{aaf@i}<\value{aaf@naffils}\do{%
+    \stepcounter{aaf@i}%
+    \noindent$^{\arabic{aaf@i}}$\csname aaf@affiltext@\arabic{aaf@i}\endcsname\par
+  }%
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\printnotes}
+% Typesets the special footnotes. Produces no output if no notes were
+% declared.
+%    \begin{macrocode}
+% ---- \printnotes ----
+% Typesets the special footnotes defined with \addnote, one per line,
+% each preceded by its symbol in a superscript.
+\newcommand\printnotes{%
+  \begingroup
+  \setcounter{aaf@i}{0}%
+  \@whilenum\value{aaf@i}<\value{aaf@nnotes}\do{%
+    \stepcounter{aaf@i}%
+    \noindent$^{\csname aaf@notesym@\arabic{aaf@i}\endcsname}$%
+    \csname aaf@notetext@\arabic{aaf@i}\endcsname\par
+  }%
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Automatic insertion into \cs{maketitle}}
+%
+% \begin{macro}{\aaf@block}
+% |\aaf@block| typesets the complete author/affiliation/notes block.
+% |\normalfont| and |\normalsize| at the top reset any font or size
+% inherited from the surrounding |\@maketitle| context (some classes
+% wrap |\@author| in bold or a larger size). The vertical skip before
+% notes is only inserted when notes exist.
+%    \begin{macrocode}
+% ===========================================================
+%  Automatic insertion into \maketitle (disabled by [manual]).
+%
+%  \aaf@block typesets the complete author/affiliation/notes block.
+%  \normalfont and \normalsize at the top reset any font inherited
+%  from the surrounding context in \@maketitle.
+%
+%  Strategy: set \@author to \aaf@block inside a full-width parbox
+%  via \author{...} in \AtBeginDocument.  Every \@maketitle typesets
+%  \@author, so the block appears at the correct location in any
+%  document class without needing to know its internal structure.
+%  The \parbox allows paragraph-mode content (incl. \par, \noindent)
+%  inside tabular cells (LR mode) used by many classes.
+% ===========================================================
+
+\newcommand\aaf@block{%
+  \normalfont  % reset font family/series/shape (some classes apply \bf
+               % or other font commands around \@author in \@maketitle)
+  \normalsize  % reset font size
+  \printauthors\par
+  \vskip 0.6em\relax
+  \printaffils
+  \ifnum\value{aaf@nnotes}>0\relax
+    \vskip 0.4em\relax
+    \printnotes
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% The |\AtBeginDocument| hook either calls |\author{}| (manual mode, to
+% suppress the ``No |\author| given'' warning) or sets |\@author| to
+% |\aaf@block| inside a full-width top-aligned |\parbox|.
+%
+% \textbf{Why \texttt{\textbackslash parbox}:} many classes typeset |\@author| inside a
+% tabular |c|-column (LR mode). Paragraph-mode commands such as |\par|
+% and |\noindent| (used by |\printauthors|, |\printaffils|,
+% |\printnotes|) require paragraph mode. A |\parbox[t]{\textwidth}|
+% provides this sub-environment; |\centering| inside it centres each
+% output line.
+%
+% \textbf{Why not \texttt{\textbackslash patchcmd}:} an earlier implementation patched
+% |\@maketitle| directly. This requires exact token-level matching of
+% the surrounding context, which varies across classes. Setting
+% |\@author| instead is class-agnostic: every |\@maketitle|
+% implementation typesets |\@author| somewhere, so the block always
+% appears at the correct location.
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \ifaaf@manual
+    % Manual mode: call \author{} to suppress the "No \author given"
+    % warning (autoaffil manages author display itself).
+    \author{}%
+  \else
+    % Auto mode: set \@author to our block inside a \parbox[t]{\textwidth}.
+    %
+    % This is the general injection strategy: rather than patching
+    % \@maketitle (which would require exact token-level matching of
+    % the surrounding context, varying across classes), we place our
+    % content directly into \@author.  Since every \@maketitle typesets
+    % \@author somewhere, the block always appears at the correct location
+    % regardless of the surrounding structure.
+    %
+    % \parbox[t]{\textwidth} creates a top-aligned paragraph box spanning
+    % the full text width.  This lets \printauthors, \printaffils, and
+    % \printnotes use paragraph-mode commands (such as \par and \noindent)
+    % even when \@author is typeset inside a tabular cell (LR mode).
+    % \centering centres each line within the parbox.
+    \author{%
+      \parbox[t]{\textwidth}{%
+        \centering
+        \aaf@block
+      }%
+    }%
+  \fi
+}
+
+\makeatother
+%    \end{macrocode}
+%
+% Close the \textsf{package} docstrip guard.
+%
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \Finale

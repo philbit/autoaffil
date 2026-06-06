@@ -1,0 +1,22 @@
+% test-superaftercomma.tex
+% The [superaftercomma] option: superscripts appear after the comma that
+% separates author names (revtex4-2 / Physical Review style).
+\documentclass{article}
+\usepackage[superaftercomma]{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Institute One}
+\addauthor{Bob Brown}
+  \addaffil{Institute Two}
+  \addaffil{Institute One}
+\addauthor{Carol Chen}
+  \addaffil{Institute Two}
+
+\title{Test: superaftercomma}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Superscripts follow the comma, not precede it.
+\end{document}

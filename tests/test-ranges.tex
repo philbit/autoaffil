@@ -1,0 +1,23 @@
+% test-ranges.tex
+% The [ranges] option: a run of 3+ consecutive affiliation numbers is
+% compressed to n--m.  Alice has affiliations 1,2,3 -> should show 1--3.
+% Bob has affiliations 1,3 (non-consecutive pair) -> should show 1,3.
+\documentclass{article}
+\usepackage[ranges]{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Inst A}
+  \addaffil{Inst B}
+  \addaffil{Inst C}
+\addauthor{Bob Brown}
+  \addaffil{Inst A}
+  \addaffil{Inst C}
+
+\title{Test: Ranges}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Alice should have a range superscript; Bob should have two separate numbers.
+\end{document}

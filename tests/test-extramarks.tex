@@ -1,0 +1,20 @@
+% test-extramarks.tex
+% Edge case: an author with extra marks but no affiliation.
+% The extra mark should appear as a superscript; no affiliation number.
+\documentclass{article}
+\usepackage{autoaffil}
+
+\addauthor[\dagger]{Alice Anderson}
+  % no \addaffil — only the \dagger superscript
+\addauthor{Bob Brown}
+  \addaffil{Institute One}
+\addnote{\dagger}{Alice has no institutional affiliation.}
+
+\title{Test: Extra Marks, No Affiliation}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Alice should show only the \textdagger\ superscript.
+\end{document}

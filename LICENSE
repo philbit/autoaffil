@@ -1,0 +1,47 @@
+The LaTeX Project Public License
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+LPPL Version 1.3c  2008-05-04
+
+Copyright (C) 2026 Philip Bittihn <philip@bittihn.de>
+
+=======================================================================
+
+This work may be distributed and/or modified under the conditions of
+the LaTeX Project Public License, either version 1.3c of this license
+or (at your option) any later version.
+
+The latest version of this license is in
+
+    https://www.latex-project.org/lppl.txt
+
+and version 1.3c or later is part of all distributions of LaTeX
+version 2008 or later.
+
+This work has the LPPL maintenance status `maintained'.
+
+The Current Maintainer of this work is Philip Bittihn.
+
+This work consists of the files autoaffil.dtx and autoaffil.ins,
+and the derived file autoaffil.sty.
+
+=======================================================================
+
+LPPL Version 1.3c conditions (summary):
+
+1. You may distribute an unmodified copy of this work.
+
+2. You may distribute a modified copy of this work provided that:
+   - the modified work is distributed under a different name;
+   - you clearly identify the modifications;
+   - all licensing conditions from the original work are retained;
+   - either (a) the original author is notified, or (b) the modified
+     work carries a prominent notice that it differs from the original.
+
+3. You may distribute compiled forms (e.g. PDF) of this work provided
+   that you also distribute the complete source (the .dtx file).
+
+4. There is NO WARRANTY for this work.
+
+For the complete, binding text of the LPPL 1.3c, see:
+    https://www.latex-project.org/lppl/lppl-1-3c.txt

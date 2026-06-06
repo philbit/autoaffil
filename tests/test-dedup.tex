@@ -1,0 +1,21 @@
+% test-dedup.tex
+% Deduplication: all three authors share the same institute.
+% Only one affiliation entry should appear in the output.
+\documentclass{article}
+\usepackage{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Shared Institute}
+\addauthor{Bob Brown}
+  \addaffil{Shared Institute}
+\addauthor{Carol Chen}
+  \addaffil{Shared Institute}
+
+\title{Test: Deduplication}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Hello world.
+\end{document}

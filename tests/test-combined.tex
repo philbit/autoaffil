@@ -1,0 +1,28 @@
+% test-combined.tex
+% All four options combined: ranges + superaftercomma + nobreak + notes.
+% This is the canonical "kitchen sink" test.
+\documentclass{article}
+\usepackage[ranges,superaftercomma,nobreak]{autoaffil}
+
+\addauthor[*]{Alice Anderson}
+  \addaffil{MIT, Cambridge MA}
+  \addaffil{Princeton University}
+\addauthor[*,\dagger]{Bob Brown}
+  \addaffil{MIT, Cambridge MA}
+  \addaffil{CERN, Geneva}
+\addauthor{Carol Chen}
+  \addaffil{MIT, Cambridge MA}
+  \addaffil{Princeton University}
+  \addaffil{CERN, Geneva}
+\addnote{*}{Equal contribution.}
+\addnote{\dagger}{Corresponding: bob@example.com}
+
+\title{Test: Combined Options}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Alice and Bob have ranges; Carol has affiliations 1,2,3 which should compress to
+a range under the \texttt{ranges} option.
+\end{document}

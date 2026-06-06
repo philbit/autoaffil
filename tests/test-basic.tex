@@ -1,0 +1,23 @@
+% test-basic.tex
+% Basic functionality: multiple authors, multiple affiliations, automatic
+% deduplication of shared affiliations, \addnote output.
+\documentclass{article}
+\usepackage{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{State University}
+  \addaffil{National Lab}
+\addauthor{Bob Brown}
+  \addaffil{State University}   % deduplicated with Alice's first affil
+\addauthor{Carol Chen}
+  \addaffil{National Lab}       % deduplicated with Alice's second affil
+  \addaffil{Tech Institute}
+
+\title{Test: Basic}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Hello world.
+\end{document}

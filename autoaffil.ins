@@ -1,0 +1,47 @@
+%% autoaffil.ins
+%% Run with: latex autoaffil.ins
+%% This will extract autoaffil.sty from autoaffil.dtx.
+
+\input docstrip.tex
+\keepsilent
+
+\usedir{tex/latex/autoaffil}
+
+\preamble
+
+File: autoaffil.sty
+Description: Automatic affiliation footnote numbering for LaTeX.
+
+Copyright (C) 2026 Philip Bittihn <philip@bittihn.de>
+
+This work may be distributed and/or modified under the conditions of
+the LaTeX Project Public License, either version 1.3c of this license
+or (at your option) any later version.
+The latest version of this license is in
+    https://www.latex-project.org/lppl.txt
+
+This work has the LPPL maintenance status `maintained'.
+The Current Maintainer of this work is Philip Bittihn.
+
+This work consists of the files autoaffil.dtx and autoaffil.ins
+and the derived file autoaffil.sty.
+
+\endpreamble
+
+\generate{\file{autoaffil.sty}{\from{autoaffil.dtx}{package}}}
+
+\obeyspaces
+\Msg{*************************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move the following}
+\Msg{* file into a directory searched by TeX:}
+\Msg{*}
+\Msg{*     autoaffil.sty}
+\Msg{*}
+\Msg{* To produce the documentation run:}
+\Msg{*}
+\Msg{*     pdflatex autoaffil.dtx  (three times)}
+\Msg{*}
+\Msg{*************************************************************}
+
+\endbatchfile

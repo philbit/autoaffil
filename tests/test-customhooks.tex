@@ -1,0 +1,24 @@
+% test-customhooks.tex
+% Custom \aafauthorfont, \aafauthorsep, and \aafauthorspace hooks.
+\documentclass{article}
+\usepackage{autoaffil}
+
+% Use italic names, semicolon separators, and a wider space.
+\renewcommand\aafauthorfont[1]{\textit{#1}}
+\renewcommand\aafauthorsep{;}
+\renewcommand\aafauthorspace{\hspace{1em}}
+
+\addauthor{Alice Anderson}
+  \addaffil{Institute One}
+\addauthor{Bob Brown}
+  \addaffil{Institute Two}
+  \addaffil{Institute One}
+
+\title{Test: Custom Hooks}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Author names should appear in italics, separated by semicolons.
+\end{document}

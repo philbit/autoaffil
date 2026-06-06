@@ -1,0 +1,19 @@
+% test-noaffil.tex
+% Edge case: one author has no affiliation declared.
+% The package should handle this gracefully (empty superscript for that author).
+\documentclass{article}
+\usepackage{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Institute One}
+\addauthor{Bob Brown}
+  % intentionally no \addaffil
+
+\title{Test: Author With No Affiliation}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Bob Brown has no affiliation; his name should appear without a superscript.
+\end{document}

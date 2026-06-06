@@ -1,0 +1,22 @@
+% test-nobreak.tex
+% The [nobreak] option wraps each author name+superscript unit in \mbox{}.
+% This test just verifies that the option compiles cleanly and produces
+% author names in the output.
+\documentclass{article}
+\usepackage[nobreak]{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Institute One}
+\addauthor{Bob Brown}
+  \addaffil{Institute Two}
+\addauthor{Carol Chen}
+  \addaffil{Institute One}
+
+\title{Test: nobreak}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+Line breaks are suppressed within each name+superscript unit.
+\end{document}

@@ -1,0 +1,31 @@
+% test-manual.tex
+% The [manual] option suppresses auto-insertion; the user calls
+% \printauthors, \printaffils, and \printnotes explicitly.
+\documentclass{article}
+\usepackage[manual]{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Institute One}
+\addauthor{Bob Brown}
+  \addaffil{Institute Two}
+  \addaffil{Institute One}
+\addnote{*}{Equal contribution.}
+
+\title{Test: Manual Mode}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+
+% Manually place the author block after \maketitle.
+\begin{center}
+\printauthors\par
+\vskip 0.5em
+\printaffils
+\vskip 0.3em
+\printnotes
+\end{center}
+
+\section{Introduction}
+In manual mode the user controls placement.
+\end{document}

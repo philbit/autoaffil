@@ -1,0 +1,16 @@
+% test-singleauthor.tex
+% Edge case: a single author — no separator or trailing comma should appear.
+\documentclass{article}
+\usepackage{autoaffil}
+
+\addauthor{Alice Anderson}
+  \addaffil{Only Institute}
+
+\title{Test: Single Author}
+\date{2026-01-01}
+
+\begin{document}
+\maketitle
+\section{Body}
+With one author there should be no separator tokens in the output.
+\end{document}
