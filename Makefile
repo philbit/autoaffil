@@ -31,16 +31,20 @@ test: unpack
 	cd tests && bash run_tests.sh
 
 ## Create a flat CTAN upload archive: autoaffil.zip
-## Contains: autoaffil.dtx, autoaffil.ins, autoaffil.pdf, README.md
+## Contains: autoaffil.dtx, autoaffil.ins, autoaffil.pdf, README.md, CHANGELOG.md
+## Note: a separate .tds.zip is NOT included — CTAN and TeX Live discourage
+## TDS zips for small, straightforward packages.
 ctan: doc unpack
 	mkdir -p ctan/$(PACKAGE)
-	cp $(DTXFILE) $(INSFILE) $(PDFFILE) README.md ctan/$(PACKAGE)/
+	cp $(DTXFILE) $(INSFILE) $(PDFFILE) README.md CHANGELOG.md ctan/$(PACKAGE)/
 	cd ctan && zip -r ../$(PACKAGE).zip $(PACKAGE)
 	rm -rf ctan
 	@echo ""
 	@echo "CTAN archive: $(PACKAGE).zip"
 
-## Create a TDS-compliant zip (for CTAN's 'upload with TDS' option).
+## Create a TDS-compliant zip.
+## Not submitted to CTAN — included for reference only.
+## CTAN and TeX Live discourage .tds.zip files for small, straightforward packages.
 tds: doc unpack
 	mkdir -p tds/tex/latex/$(PACKAGE)
 	mkdir -p tds/doc/latex/$(PACKAGE)
@@ -70,6 +74,6 @@ help:
 	@echo "  unpack     extract autoaffil.sty from autoaffil.dtx"
 	@echo "  test       run the regression test suite"
 	@echo "  ctan       create autoaffil.zip for CTAN upload"
-	@echo "  tds        create autoaffil.tds.zip (TDS-compliant)"
+	@echo "  tds        create autoaffil.tds.zip (TDS layout; not submitted to CTAN)"
 	@echo "  clean      remove auxiliary files"
 	@echo "  distclean  remove all generated files"

@@ -234,6 +234,16 @@ make all         # extract autoaffil.sty + build autoaffil.pdf
 make test        # run regression tests
 ```
 
+### CTAN releases
+
+Official releases on CTAN are produced by the maintainer using `make ctan`, which
+creates a flat `autoaffil.zip` archive containing `autoaffil.dtx`, `autoaffil.ins`,
+`autoaffil.pdf`, `README.md`, and `CHANGELOG.md`. This archive is uploaded directly
+to CTAN at [`macros/latex/contrib/autoaffil`](https://ctan.org/pkg/autoaffil). No
+separate `.tds.zip` is submitted — CTAN and TeX Live handle the TDS installation
+from the flat archive automatically, and a separate TDS zip is discouraged for
+small, straightforward packages.
+
 ---
 
 ## License
